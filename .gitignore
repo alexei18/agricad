@@ -1,0 +1,25 @@
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# Next.js build output
+/.next/
+/out/
+
+# Vercel
+.vercel
+
+# Local environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env # Poți adăuga și asta dacă .env conține secrete și nu e .env.example
+
+# IDEs and editors
+.vscode/
+# ... altele specifice IDE-ului tău ...
+
+# Mac files
+.DS_Store

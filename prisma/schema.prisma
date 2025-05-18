@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+  referentialIntegrity = "prisma" 
+}
+
+// Represents a registered mayor account
+model Mayor {
+  id                  String   @id @default(cuid())
+  name                String
+  village             String   @unique // Each mayor belongs to a unique village
+  email               String   @unique
+  password            String   // Store hashed password
+  subscriptionStatus  Status   @default(PENDING)
+  subscriptionEndDate DateTime?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
+
+// Represents a registered farmer account
+model Farmer {
+  id          String   @id @default(cuid())
+  name        String
+  companyCode String   @unique // Fiscal code or unique identifier
+  village     String   // Village the farmer primarily belongs to
+  email       String?  @unique // Optional email
+  phone       String? // Optional phone
+  password    String   // Store hashed password
+  color       String?  // Optional color for map representation
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations: A farmer can own or cultivate many parcels
+  ownedParcels     Parcel[] @relation("Owner")
+  cultivatedParcels Parcel[] @relation("Cultivator")
+}
+
+// Represents a land parcel
+model Parcel {
+  id           String     @id // Use String for IDs like '3411101.01'
+  village      String     // Village the parcel is located in
+  area         Float      // Area in hectares
+  coordinates  Json       // Store WGS84 coordinates as [[lon, lat], ...]
+  ownerId      String?    // Optional: Foreign key to Farmer who owns it
+  cultivatorId String?    // Optional: Foreign key to Farmer who cultivates it
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  // Relations
+  owner        Farmer?    @relation("Owner", fields: [ownerId], references: [id], onDelete: SetNull)
+  cultivator   Farmer?    @relation("Cultivator", fields: [cultivatorId], references: [id], onDelete: SetNull)
+
+  @@index([village])
+  @@index([ownerId])
+  @@index([cultivatorId])
+}
+
+// Represents different subscription statuses for Mayors
+enum Status {
+  ACTIVE
+  INACTIVE
+  PENDING
+}
+
+
+// Log entry for tracking system and user actions
+model LogEntry {
+  id        String    @id @default(cuid())
+  timestamp DateTime  @default(now())
+  logType   LogType   // Type of log (e.g., ASSIGNMENT, USER_ACTION, SYSTEM)
+  actor     String?   // ID or identifier of the user/system performing the action (e.g., mayorId, adminId, 'System')
+  action    String    // Description of the action performed (e.g., 'Assigned Parcel', 'Updated Farmer', 'Cleared Logs')
+  details   String?   @db.Text // Optional additional details about the action (e.g., Parcel ID, Farmer ID, changed values)
+
+  @@index([timestamp])
+  @@index([logType])
+  @@index([actor])
+}
+
+// Enum for different types of log entries
+enum LogType {
+  ASSIGNMENT  // Parcel assignment actions
+  USER_ACTION // General user actions (create/update/delete)
+  SYSTEM  
+  PARCEL_UPLOAD    // System events (backups, data clearing, etc.)
+}
