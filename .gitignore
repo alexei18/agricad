@@ -15,8 +15,7 @@
 .env.development.local
 .env.test.local
 .env.production.local
-*.env # Poți adăuga și asta dacă .env conține secrete și nu e .env.example
-
+.env 
 # IDEs and editors
 .vscode/
 # ... altele specifice IDE-ului tău ...

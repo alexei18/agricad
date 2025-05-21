@@ -146,15 +146,32 @@ const LandingPage: React.FC = () => {
                     Videoclip demo
                   </button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[60vw] p-0 overflow-hidden">
-                  {/* Nu mai avem nevoie de DialogHeader și DialogTitle dacă vrem ca video-ul să ocupe tot spațiul */}
-                  {/* Dacă vrei un titlu, adaugă <DialogHeader><DialogTitle>Demo Video</DialogTitle></DialogHeader> aici */}
-                  {/* Videoclipul - înlocuiește 'demo-agricad.mp4' cu numele real al fișierului tău */}
-                  <video width="100%" height="auto" controls autoPlay playsInline>
-                    <source src="./vid/prezentare_agricd.mp4" type="video/mp4" />
-                    Browserul tău nu suportă tag-ul video. Te rugăm să încerci un browser modern.
-                  </video>
-                  {/* Poți adăuga un <DialogFooter><DialogClose asChild><Button>Închide</Button></DialogClose></DialogFooter> dacă dorești */}
+                <DialogContent className="sm:max-w-[90vw] md:max-w-[80vw] lg:max-w-[70vw] xl:max-w-[50vw] p-0 overflow-hidden aspect-video"> {/* Am adăugat aspect-video și am ajustat max-w */}
+                  {/* Am eliminat DialogHeader și DialogTitle pentru a lăsa videoclipul să ocupe tot spațiul.
+                    Poți să le adaugi înapoi dacă dorești un titlu pentru modal.
+                  */}
+                  
+                  {/* --- AICI INTRODUCEM CODUL DE EMBED DE LA VIMEO --- */}
+                  <div style={{padding:"56.25% 0 0 0", position:"relative"}}> {/* 56.25% este pentru un aspect ratio 16:9 */}
+                      <iframe 
+                          src="https://player.vimeo.com/video/1086287591?h=363350e1f6&amp;badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479&amp;autoplay=1" // Am adăugat &autoplay=1
+                          frameBorder="0" 
+                          allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media" 
+                          style={{position:"absolute",top:0,left:0,width:"100%",height:"100%"}} 
+                          title="Prezentare AgriCad">
+                      </iframe>
+                  </div>
+                  {/* --- SFÂRȘIT COD EMBED VIMEO --- */}
+
+                  {/* Scriptul <script src="https://player.vimeo.com/api/player.js"></script>
+                    este pentru API-ul playerului Vimeo. Pentru simpla redare, iframe-ul este suficient.
+                    Dacă ai nevoie de control avansat asupra playerului (ex: din codul tău JavaScript),
+                    va trebui să încarci acest script folosind componenta <Script> de la Next.js:
+                    import Script from 'next/script';
+                    ...
+                    <Script src="https://player.vimeo.com/api/player.js" strategy="lazyOnload" />
+                    Dar pentru început, încearcă fără el.
+                  */}
                 </DialogContent>
               </Dialog>
               {/* --- SFÂRȘIT BUTON MODIFICAT ȘI DIALOG --- */}
@@ -220,7 +237,7 @@ const LandingPage: React.FC = () => {
                 title: "Statistici globale și individuale",
                 description: "Primăria și agricultorii pot vizualiza statistici pentru tot satul și individuale.",
                 icon: <AlignEndHorizontal className={`w-8 h-8 md:w-10 md:h-10 mb-3 text-[${colors.primaryAccent}]`} />,
-                image: "./img/statistici1.png",
+                image: "./img/Statistici1.png",
                 size: "sm:col-span-1 lg:col-span-2" // Modificat size
               },
               // Am eliminat un card pentru a se potrivi mai bine într-un layout par, sau ajustează `size` pentru 5 elemente.
@@ -309,7 +326,7 @@ const LandingPage: React.FC = () => {
               Feedback-ul și ideile dumneavoastră sunt valoroase! Dacă aveți sugestii pentru noi funcționalități sau îmbunătățiri, apăsați butonul de mai jos:
             </p>
             <a
-              href="mailto:agricad.suport@gmail.com?subject=Sugestie%20pentru%20platforma%20AgriCad"
+              href="mailto:agricad.suport@gmail.com"
               className={`inline-flex items-center justify-center bg-[${colors.primaryAccent}]  font-semibold py-3 px-8 rounded-lg shadow-md hover:bg-[${colors.primaryAccentDarker}] active:bg-green-700 active:scale-95 transition-all duration-200 transform hover:scale-105`}
             >
               <Send className="mr-2 h-5 w-5" /> Scrie un email
@@ -329,7 +346,7 @@ const LandingPage: React.FC = () => {
           </p>
           <div className={`bg-[${colors.background}] p-8 md:p-12 rounded-xl shadow-lg border border-[${colors.lightBorder}] inline-block hover:shadow-xl transition-shadow duration-300`}>
             <p className={`text-xl md:text-2xl font-semibold text-[${colors.textPrimary}] mb-6`}>Suntem aici pentru dumneavoastră:</p>
-            <p className={`text-[${colors.textSecondary}] text-base md:text-lg mb-3`}>Email: <a href="mailto:contact@AgriCad.md" className={`text-[${colors.primaryAccent}] hover:underline hover:text-[${colors.primaryAccentDarker}]`}>contact@agricad.md</a></p>
+            <p className={`text-[${colors.textSecondary}] text-base md:text-lg mb-3`}>Email: <a href="mailto:agricad.md@gmail.com" className={`text-[${colors.primaryAccent}] hover:underline hover:text-[${colors.primaryAccentDarker}]`}>agricad.md@gmail.com</a></p>
             <p className={`text-[${colors.textSecondary}] text-base md:text-lg`}>Telefon: <a href="tel:+37368512814" className={`text-[${colors.primaryAccent}] hover:underline hover:text-[${colors.primaryAccentDarker}]`}>+373-685-12-814</a></p>
           </div>
         </div>

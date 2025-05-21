@@ -261,3 +261,9 @@ The application is set up with bypassed login for easier development and testing
 - E Agro
 - Agro Tech Vision
 -
+
+
+
+# Database seed
+ npx prisma migrate reset
+ npx prisma migrate dev --name <nume>
